@@ -6,48 +6,27 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/23 15:48:28 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/23 16:13:16 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <string.h>
+#include  <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+
 char *get_next_line(int fd)
 {
-	static char		*stash;
-	char			buffer[42];
-	static size_t	i;
-	ssize_t			size;
-	int				fd;
-
-	if (fd == -1)
-		return;
-	size = read(fd, buffer, sizeof(buffer));
-	stash = (char *)malloc(size * sizeof(char));
-	if (stash == NULL)
-		return (NULL);
-	strlcpy(stash, buffer, size);
-	while (i <= size - 1)
-	{
-		if (stash[i] == '\n')
-		{
-			strlcpy(dst, stash, size - i);
-			break;
-		}
-		else if (i == size - 1)
-		{
-
-		}
-		i++;
-	}
-	return (stash);
 }
 
 int	main()
 {
-	int	fd;
+	int	f;
 
-	fd = open(stdio.txt, 0_RDONLY);
-	if (fd == -1)
+	f = open("stdio.txt", O_RDONLY);
+	if (f > 0)
 		return (-1);
-	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(f));
 }
 
