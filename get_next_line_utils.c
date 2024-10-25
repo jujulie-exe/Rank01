@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:08:38 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/24 16:08:47 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/25 11:44:11 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,57 @@ size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	i = 0;
 	while (s[i] != '\0')
 	{
 		i++;
 	}
 	return (i);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+	size_t	y;
+	size_t	lens;
+
+	y = 0;
+	i = ft_strlen(dst);
+	lens = ft_strlen(src);
+	if (dstsize <= i)
+	{
+		return (dstsize + lens);
+	}
+	while (src[y] != '\0' && (i + y) < dstsize - 1)
+	{
+		dst[i + y] = src[y];
+		y++;
+	}
+	dst[i + y] = '\0';
+	return (i + lens);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	len;
+	size_t	y;
+
+	len = 0;
+	y = 0;
+	while (src[len] != '\0')
+	{
+		len++;
+	}
+	if (dstsize > 0)
+	{
+		while (src[y] != '\0' && y < dstsize - 1)
+		{
+			dst[y] = src[y];
+			y++;
+		}
+		dst[y] = '\0';
+	}
+	return (len);
 }
 
 char	*ft_strdup(const char *s1)
