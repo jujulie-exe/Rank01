@@ -6,110 +6,105 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/25 14:44:47 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/28 17:21:33 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*fill_join(char *b,char *s, int fd, int bytes)
+static char	*read_new_line(char *buffer, int fd, char **stash)
 {
 	char		*temp;
-	static char	*stash;
+	ssize_t		bytes;
 
-	if (b == NULL || s == NULL)
+	bytes = 1;
+	while (bytes > 0)
 	{
+		bytes = read(fd, buffer, BUFFER_SIZE);
+		if (bytes < 0)
+			return (NULL);
+		if (bytes == 0)
+			break;
+		buffer[bytes] = '\0';
+		if(*stash == NULL)
+			*stash = ft_strdup("");
+		temp = *stash;
+		*stash = ft_strjoin(temp, buffer);
+		free(temp);
+		temp = NULL;
+		if (*stash == NULL)
+			return (NULL);
+		if (ft_strchr(*stash, '\n') != NULL)
+			break;
+	}
+	return (*stash);
+}
+
+static char	*fill_new_line(char *stash)
+{
+	size_t	i;
+	char	*line;
+
+	i = 0;
+	while(stash[i] != '\n' && stash[i] != '\0')
+	{
+		i++;
+	}
+	line =(char *)malloc((i + 2) * sizeof(char));
+	if (line == NULL)
+		return (NULL);
+	ft_strlcpy(line, stash, i + 2);
+	return (line);
+}
+
+static char	*clear_stash(char *stash)
+{
+	char			*update_stash;
+	size_t			len;
+	unsigned int	j;
+
+	len = ft_strlen(stash);
+	j = 0;
+	while (stash[j] != '\n' && stash[j] != '\0')
+	{
+		j++;
+	}
+	if (stash[j] == '\0')
+	{
+		printf("cazzo");
+		free(stash);
 		return (NULL);
 	}
-	bytes = read(fd, b, BUFFER_SIZE);
-	if (bytes <= 0)
-	{
-		free(b);
-		free(s);
+	update_stash = ft_substr(stash, j + 1, (len - j) + 1);
+	if (update_stash == NULL)
 		return (NULL);
-	}
-	b[bytes] = '\0';
-	temp = s;
-	stash = ft_strjoin(s, b);
-	if (stash == NULL)
-	return (NULL);
-	free(temp);
-	return (stash);
+	return (update_stash);
 }
 
 char *get_next_line(int fd)
 {
 	char		*buffer;
-	static	char	*stash;
-	char		*dst;
-	char 		*ptr;
-	size_t		len;
-	
-	ptr = NULL;
-	len = 0;
-	stash = NULL;
-	
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	char 		*line;
+	static char	*stash;
+
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0 )
 	{
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
-	if (stash == NULL)
+	if (buffer == NULL)
+		return (NULL);
+	stash = read_new_line(buffer, fd, &stash);
+	if (stash != NULL)
 	{
-	stash = (char *)malloc(BUFFER_SIZE * sizeof(char));
-	 if (stash == NULL)
-		return(NULL);
-	stash[0] = '\0';
-	}
-
-	while (1)
-	{
-		buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
-		if (buffer == NULL)
-		{
-			free(stash);
-			return (NULL);
-		}
-		stash = fill_join(buffer, stash, fd, 1);
-		if (stash == NULL)
-			return (NULL);
-		ptr = ft_strchr(stash, '\n');
-		if (ptr != NULL)
-		{
-			len = ft_strlen(stash) - ft_strlen(ptr) + 1;
-			dst = (char *)malloc((len + 1) * sizeof(char));
-			if (dst == NULL)
-			{
-				free(buffer);
-				free(stash);
-				return (NULL);
-			}
-			ft_strlcpy(dst, stash, len + 1);
-			char *temp = stash;
-			stash = strdup(ptr + 1);
-			if (stash == NULL)
-			{
-				free(dst);
-				free(buffer);
-				free(temp);
-				return (NULL);
-			}
-			free(buffer);
-			free(temp);
-			return (dst);
-		}
+		line = fill_new_line(stash);
+		if (line != NULL)
+			stash = clear_stash(stash);
+		free(buffer);
+		return (line);
 	}
 	free(buffer);
-	free(stash);
 	return (NULL);
 }
-
-/*int	main()
-{
-	int	f;
-
-	f = open("stdio.txt", O_RDONLY);
-	if (f < 0)
-		return (-1);
-	printf("%s", get_next_line(f));
-}*/
-

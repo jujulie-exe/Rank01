@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 09:00:02 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/25 11:43:30 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/28 14:03:11 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ char    *ft_strchr(const char *s, int c);
 char	*get_next_line(int fd);
 size_t  ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t  ft_strlcpy(char *dst, const char *src, size_t dstsize);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif
