@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/29 12:04:40 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/29 12:59:54 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,20 @@ static char	*fill_new_line(char *stash)
 	{
 		i++;
 	}
-	line =(char *)malloc((i + 2) * sizeof(char));
-	if (line == NULL)
-		return (NULL);
-	ft_strlcpy(line, stash, i + 2);
+	if (stash[i] == '\0')
+	{
+		line =(char *)malloc((i + 1) * sizeof(char));
+		if (line == NULL)
+			return (NULL);
+		ft_strlcpy(line, stash, i + 1);
+	}
+	else 
+	{
+		line = malloc((i + 2) * sizeof(char));
+		if (line == NULL)
+			return (NULL);
+		ft_strlcpy(line, stash, i + 2);
+	}
 	return (line);
 }
 
@@ -70,10 +80,12 @@ static char	*clear_stash(char *stash)
 	if (stash[j] == '\0' && j > 0)
 	{
 		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
 	update_stash = ft_substr(stash, j + 1, (len - j) + 1);
 	free(stash);
+	stash = NULL;
 	if (update_stash == NULL)
 		return (NULL);
 	return (update_stash);
@@ -101,7 +113,7 @@ char *get_next_line(int fd)
 	if (buffer == NULL)
 		return (NULL);
 	stash = read_new_line(buffer, fd, &stash);
-	free(buffer);
+	free_and_null(&buffer);
 	if (stash == NULL || ft_strlen(stash) == 0)
 		return (free_and_null(&stash));
 	line = fill_new_line(stash);
