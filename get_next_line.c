@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/28 17:21:33 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/29 12:04:40 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,19 +66,24 @@ static char	*clear_stash(char *stash)
 	len = ft_strlen(stash);
 	j = 0;
 	while (stash[j] != '\n' && stash[j] != '\0')
-	{
 		j++;
-	}
-	if (stash[j] == '\0')
+	if (stash[j] == '\0' && j > 0)
 	{
-		printf("cazzo");
 		free(stash);
 		return (NULL);
 	}
 	update_stash = ft_substr(stash, j + 1, (len - j) + 1);
+	free(stash);
 	if (update_stash == NULL)
 		return (NULL);
 	return (update_stash);
+}
+
+static char	*free_and_null(char **stash)
+{
+	free(*stash);
+	*stash = NULL;
+	return (NULL);
 }
 
 char *get_next_line(int fd)
@@ -90,21 +95,20 @@ char *get_next_line(int fd)
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0 )
 	{
-		free(buffer);
-		buffer = NULL;
-		return (NULL);
+		free_and_null(&buffer);
+		return (free_and_null(&stash));
 	}
 	if (buffer == NULL)
 		return (NULL);
 	stash = read_new_line(buffer, fd, &stash);
-	if (stash != NULL)
-	{
-		line = fill_new_line(stash);
-		if (line != NULL)
-			stash = clear_stash(stash);
-		free(buffer);
-		return (line);
-	}
 	free(buffer);
-	return (NULL);
+	if (stash == NULL || ft_strlen(stash) == 0)
+		return (free_and_null(&stash));
+	line = fill_new_line(stash);
+	if (line == NULL)
+	{
+		return (free_and_null(&stash));
+	}
+	stash = clear_stash(stash);
+	return (line);
 }
