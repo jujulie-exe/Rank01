@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/10/29 12:59:54 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/10/29 18:21:42 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,25 @@ static char	*fill_new_line(char *stash)
 	return (line);
 }
 
-static char	*clear_stash(char *stash)
+static char	*clear_stash(char **stash)
 {
 	char			*update_stash;
 	size_t			len;
 	unsigned int	j;
 
-	len = ft_strlen(stash);
+	len = ft_strlen(*stash);
 	j = 0;
-	while (stash[j] != '\n' && stash[j] != '\0')
+	while ((*stash)[j] != '\n' && (*stash)[j] != '\0')
 		j++;
-	if (stash[j] == '\0' && j > 0)
+	if ((*stash)[j] == '\0')
 	{
-		free(stash);
-		stash = NULL;
+		free(*stash);
+		*stash = NULL;
 		return (NULL);
 	}
-	update_stash = ft_substr(stash, j + 1, (len - j) + 1);
-	free(stash);
-	stash = NULL;
+	update_stash = ft_substr(*stash, j + 1, (len - j) + 1);
+	free(*stash);
+	*stash = NULL;
 	if (update_stash == NULL)
 		return (NULL);
 	return (update_stash);
@@ -121,6 +121,6 @@ char *get_next_line(int fd)
 	{
 		return (free_and_null(&stash));
 	}
-	stash = clear_stash(stash);
+	stash = clear_stash(&stash);
 	return (line);
 }
