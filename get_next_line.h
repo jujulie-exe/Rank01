@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 09:00:02 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/01 14:22:14 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/01 17:14:23 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 char    *ft_strdup(const char *s1);
 size_t  ft_strlen(const char *s);
 char    *ft_strjoin(char const *s1, char const *s2);
-char    *ft_strchr(const char *s, int c);
 char	*get_next_line(int fd);
 size_t  ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

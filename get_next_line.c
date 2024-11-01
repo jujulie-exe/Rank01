@@ -6,16 +6,41 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/01 11:13:27 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/01 17:20:31 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*read_new_line(char *buffer, int fd, char **stash)
+char static	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
+
+	i = 0;
+	if ((char)c == '\0')
+	{
+		while (s[i] != '\0')
+		{
+			i++;
+		}
+		return ((char *)&s[i]);
+	}
+	while (s[i] != '\0')
+	{
+		if (s[i] == (char)c)
+		{
+			return ((char *)&s[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+static char	*read_new_line(int fd, char **stash)
 {
 	char		*temp;
 	ssize_t		bytes;
+	char		buffer[BUFFER_SIZE + 1];
 
 	bytes = 1;
 	while (bytes > 0)
@@ -24,9 +49,9 @@ static char	*read_new_line(char *buffer, int fd, char **stash)
 		if (bytes < 0)
 			return (NULL);
 		if (bytes == 0)
-			break;
+			break ;
 		buffer[bytes] = '\0';
-		if(*stash == NULL)
+		if (*stash == NULL)
 			*stash = ft_strdup("");
 		temp = *stash;
 		*stash = ft_strjoin(temp, buffer);
@@ -95,37 +120,31 @@ static char	*clear_stash(char **stash)
 	return (update_stash);
 }
 
-static char	*free_and_null(char **stash)
-{
-	free(*stash);
-	*stash = NULL;
-	return (NULL);
-}
-
 char *get_next_line(int fd)
 {
-	char		*buffer;
 	char 		*line;
 	static char	*stash;
 
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 	{
-		free_and_null(&buffer);
-		return (free_and_null(&stash));
-	}
-	if (buffer == NULL)
-	{
-		free_and_null(&stash);
+		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
-	stash = read_new_line(buffer, fd, &stash);
-	free_and_null(&buffer);
+	stash = read_new_line(fd, &stash);
 	if (stash == NULL || ft_strlen(stash) == 0)
-		return (free_and_null(&stash));
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	line = fill_new_line(stash);
 	if (line == NULL)
-		return (free_and_null(&stash));
+	{
+		free(stash);
+		stash = NULL;
+		return (NULL);
+	}
 	stash = clear_stash(&stash);
 	return (line);
 }
