@@ -6,16 +6,16 @@
 #    By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/02 17:27:06 by jfranco           #+#    #+#              #
-#    Updated: 2024/11/02 17:29:12 by jfranco          ###   ########.fr        #
+#    Updated: 2024/11/04 20:06:47 by jfranco          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Printf.a
+NAME = libftprintf.a
 
 CC = cc
 CFLAGS = -g3 -Wall -Wextra -Werror
 
-SRCS = 
+SRCS = input.c out_digit.c out_char.c
 
 OBJ = $(SRCS:.c=.o)
 

@@ -6,10 +6,10 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 13:18:12 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/02 17:25:12 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/04 20:07:49 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include "ft_printf.h"
 #include <stddef.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -27,54 +27,23 @@ int	numlen(int n)
 	}
 	return (len);
 }
-int out_char(int c)
-{
-	int	len;
-
-	len = 0;
-	len = write(1, &c, 1);
-	return (len);
-}
 
 int out_str(char *s)
 {
 	int len;
 
 	len = 0;
+	if (s == NULL)
+	{
+		return write(1, "(null)", 6);
+	}
 	while (s[len] != '\0')
 	{
-		write(1, &s[len], 1);
+		out_char((int)s[len]);
 		len++;
 	}
 	return (len);
 }
-
-int out_digit(int n)
-{
-	int long	num;
-	char		c;
-
-	num = n;
-	c = 'a';
-	if (num < 0)
-	{
-		write(1, "-", 1);
-		num = -num;
-	}
-	 if (num < 9)
-	{
-		c = num + '0';
-		write(1, &c, 1);
-	}
-	else
-	{
-		out_digit(num / 10);
-		c = (num % 10) + '0';
-		write(1, &c, 1);
-	}
-	return (numlen(n));
-}
-
 
 int	check_format(char s, va_list ap)
 {
@@ -86,7 +55,13 @@ int	check_format(char s, va_list ap)
 	else if (s == 's')
 		len += out_str(va_arg(ap, char *));
 	else if (s == 'd')
-		out_digit(va_arg(ap, int));
+		len += out_digit(va_arg(ap, long long));
+	else if (s == 'x')
+		len += out_digit(va_arg(ap, unsigned int));
+	/*else if (s == 'p')
+		len += out_ptr(va_arg(ap, void *));
+	else if (s == 'i')
+		len += out*/
 	else
 		len += write(1, &s, 1);
 	return (len);
@@ -110,8 +85,8 @@ int ft_printf(const char *frmt, ...)
 	return (len);
 }
 
-int main()
+/*int main()
 {
-	/*ft_printf("12345 %d\n",(-1234567) + (890));*/
+	ft_printf("12345 %d\n",(-1234567) + (890));
 	printf("12345  %d\n",(-1234567) + (890));
-}
+}*/
