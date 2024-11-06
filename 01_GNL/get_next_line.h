@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 09:00:02 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/03 12:33:54 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/06 12:08:14 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
+# endif
+
+# if BUFFER_SIZE > 8192 * 1024
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 8388608
 # endif
 
 # include <stdio.h>

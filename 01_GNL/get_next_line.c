@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/23 13:57:40 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/04 19:25:54 by jfranco          ###   ########.fr       */
+/*   Created: 2024/11/06 11:46:03 by jfranco           #+#    #+#             */
+/*   Updated: 2024/11/06 12:09:32 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ char static	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-static char	*read_new_line(int fd, char **stash)
+static char	*read_new_line(int fd, char *stash)
 {
 	char		*temp;
 	ssize_t		bytes;
 	char		buffer[BUFFER_SIZE + 1];
 
 	bytes = 1;
-	while (bytes > 0)
+	while (bytes > 0 && (!stash || !ft_strchr(stash, '\n')))
 	{
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if (bytes < 0)
@@ -51,18 +51,16 @@ static char	*read_new_line(int fd, char **stash)
 		if (bytes == 0)
 			break ;
 		buffer[bytes] = '\0';
-		if (*stash == NULL)
-			*stash = ft_strdup("");
-		temp = *stash;
-		*stash = ft_strjoin(temp, buffer);
+		if (stash == NULL)
+			stash = ft_strdup("");
+		temp = stash;
+		stash = ft_strjoin(temp, buffer);
 		free(temp);
 		temp = NULL;
-		if (*stash == NULL)
+		if (stash == NULL)
 			return (NULL);
-		if (ft_strchr(*stash, '\n') != NULL)
-			break ;
 	}
-	return (*stash);
+	return (stash);
 }
 
 static char	*fill_new_line(char *stash)
@@ -92,25 +90,25 @@ static char	*fill_new_line(char *stash)
 	return (line);
 }
 
-static char	*clear_stash(char **stash)
+static char	*clear_stash(char *stash)
 {
 	char			*update_stash;
 	size_t			len;
 	unsigned int	j;
 
-	len = ft_strlen(*stash);
+	len = ft_strlen(stash);
 	j = 0;
-	while ((*stash)[j] != '\n' && (*stash)[j] != '\0')
+	while (stash[j] != '\n' && stash[j] != '\0')
 		j++;
-	if ((*stash)[j] == '\0')
+	if (stash[j] == '\0')
 	{
-		free(*stash);
-		*stash = NULL;
+		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
-	update_stash = ft_substr(*stash, j + 1, (len - j) + 1);
-	free(*stash);
-	*stash = NULL;
+	update_stash = ft_substr(stash, j + 1, (len - j) + 1);
+	free(stash);
+	stash = NULL;
 	if (update_stash == NULL || ft_strlen(update_stash) == 0)
 	{
 		free(update_stash);
@@ -127,13 +125,11 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 	{
-		if (!stash)
-			return(NULL);
 		free(stash);
 		stash = NULL;
 		return (NULL);
 	}
-	stash = read_new_line(fd, &stash);
+	stash = read_new_line(fd, stash);
 	if (stash == NULL || ft_strlen(stash) == 0)
 	{
 		free(stash);
@@ -147,6 +143,6 @@ char	*get_next_line(int fd)
 		stash = NULL;
 		return (NULL);
 	}
-	stash = clear_stash(&stash);
+	stash = clear_stash(stash);
 	return (line);
 }
