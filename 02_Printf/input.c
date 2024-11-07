@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 13:18:12 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/04 20:07:49 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/07 17:38:21 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -14,19 +14,6 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdio.h>
-int	numlen(int n)
-{
-	int	len;
-
-	len = 0;
-	if (n <= 0)
-		len++;
-	while (n / 10)
-	{
-		len++;
-	}
-	return (len);
-}
 
 int out_str(char *s)
 {
@@ -35,7 +22,7 @@ int out_str(char *s)
 	len = 0;
 	if (s == NULL)
 	{
-		return write(1, "(null)", 6);
+		return write(1, "(nil)", 6);
 	}
 	while (s[len] != '\0')
 	{
@@ -54,14 +41,16 @@ int	check_format(char s, va_list ap)
 		len += out_char(va_arg(ap, int));
 	else if (s == 's')
 		len += out_str(va_arg(ap, char *));
-	else if (s == 'd')
-		len += out_digit(va_arg(ap, long long));
+	else if (s == 'd'|| s == 'i')
+		len += out_digit(va_arg(ap, int));
 	else if (s == 'x')
-		len += out_digit(va_arg(ap, unsigned int));
+		len += out_hex(va_arg(ap, unsigned int));
+	else if (s == 'X')
+		len += 	
+	else if (s == 'u')
+		len += out_digit_unsigned(va_arg(ap,unsigned int));
 	/*else if (s == 'p')
-		len += out_ptr(va_arg(ap, void *));
-	else if (s == 'i')
-		len += out*/
+		len += out_ptr(va_arg(ap, void *));*/
 	else
 		len += write(1, &s, 1);
 	return (len);
