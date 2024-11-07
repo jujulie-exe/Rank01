@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 13:18:12 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/07 17:38:21 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/07 20:04:41 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -46,11 +46,11 @@ int	check_format(char s, va_list ap)
 	else if (s == 'x')
 		len += out_hex(va_arg(ap, unsigned int));
 	else if (s == 'X')
-		len += 	
+		len += 	out_hexdigit_upper_case(va_arg(ap, unsigned int));
 	else if (s == 'u')
 		len += out_digit_unsigned(va_arg(ap,unsigned int));
-	/*else if (s == 'p')
-		len += out_ptr(va_arg(ap, void *));*/
+	else if (s == 'p')
+		len += out_hex(va_arg(ap, unsigned int));
 	else
 		len += write(1, &s, 1);
 	return (len);
@@ -74,8 +74,3 @@ int ft_printf(const char *frmt, ...)
 	return (len);
 }
 
-/*int main()
-{
-	ft_printf("12345 %d\n",(-1234567) + (890));
-	printf("12345  %d\n",(-1234567) + (890));
-}*/
