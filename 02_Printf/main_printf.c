@@ -70,8 +70,11 @@ int main(void)
 	ft_ret = 0;
 	printf("TEST [HEXADECIMAL x]\n");
     	ft_ret += ft_printf("Hexadecimal lowercase: %x\n", 0xabcdef);
-    	//ft_ret += ft_printf("Hexadecimal lowercase: %x\n", 0xabcdef);
+    	ft_ret += ft_printf("Hexadecimal lowercase: %x\n", UINT_MAX);
+    	ft_ret += ft_printf("Hexadecimal lowercase: %x\n", 16);
     	std_ret += printf("Hexadecimal lowercase: %x\n", 0xabcdef);
+    	std_ret += printf("Hexadecimal lowercase: %x\n", UINT_MAX);
+    	std_ret += printf("Hexadecimal lowercase: %x\n", 16);
     	printf("Return values: ft_printf = %d, printf = %d\n\n", ft_ret, std_ret);
 
 /***********/////////////////////////////////////////////////////////////////****
@@ -86,9 +89,10 @@ int main(void)
 	std_ret = 0;
 	ft_ret = 0;
     	int a = 42;
+	char *s = "str random";
 	printf("TEST [POINTER]\n");
-  	ft_ret += ft_printf("Pointer test: %p\n", &a);
-    	std_ret += printf("Pointer test: %p\n", &a);
+  	ft_ret += ft_printf("Pointer test: %p\n",(void *) &a);
+    	std_ret += printf("Pointer test: %p\n",(void *) &a);
     	printf("Return values: ft_printf = %d, printf = %d\n\n", ft_ret, std_ret);
 
 /***********/////////////////////////////////////////////////////////////////****
@@ -99,9 +103,11 @@ int main(void)
    	ft_ret += ft_printf("Percentage test: %%\n");
    	ft_ret += ft_printf("Percentage test: %ixXcds%%uipmlq\n");
    	ft_ret += ft_printf("Percentage test: %%%%%%%%%%%%%%%%\n");
+   	ft_ret += ft_printf("%");
    	std_ret += printf("Percentage test: %%\n");
    	std_ret += printf("Percentage test: %ixXcds%%uipmlq\n");
    	std_ret += printf("Percentage test: %%%%%%%%%%%%%%%%\n");
+   	std_ret += printf("%");
    	printf("Return values: ft_printf = %d, printf = %d\n\n", ft_ret, std_ret);
 
 /***********/////////////////////////////////////////////////////////////////****

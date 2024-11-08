@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 12:23:05 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/07 17:15:41 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/08 13:57:17 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int out_digit(int n)
 }
 
 
-int out_hex(unsigned int n)
+int out_hex(unsigned long long n)
 {
 	int		count;
 	char 		*symb;
