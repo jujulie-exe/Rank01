@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:22:44 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/08 15:24:32 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:23:22 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int print_ad(void *ptr)
    count = 0;
   if (ptr == NULL)
   {
-	  return (write(1, "(nil)", 5));
+	  return (write(1, "0x0", 3));
   } 
    adress = (uintptr_t)ptr;
    count += write(1, "0x", 2);

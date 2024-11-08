@@ -6,7 +6,7 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 13:18:12 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/08 15:24:10 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:23:02 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
@@ -53,32 +53,42 @@ int	check_format(char s, va_list ap)
 		len += out_digit_unsigned(va_arg(ap,unsigned int));
 	else if (s == 'p')
 		len += print_ad(va_arg(ap, void *));
-	else
+	else if (s == '%')
 		len += write(1, &s, 1);
 	return (len);
 }
-
-int ft_printf(const char *frmt, ...)
+int ft_printf(const char *frmt, ...) 
 {
-	va_list ap;
-	int		len;
-	int i;
-	va_start(ap, frmt);
+    va_list ap;
+    int len;
+    int result;
 
-	len = 0;
-	i = 0;
-	while (*frmt != '\0')
+    va_start(ap, frmt);
+    len = 0;
+    if (frmt == NULL)
+        return (-1);
+    while (*frmt != '\0') 
 	{
-		if (*frmt == '%')
+        if (*frmt == '%') 
 		{
-			len += check_format(*(++frmt), ap);
-		}
-		else if (*frmt != '\0')
-			len += write(1, frmt, 1);
-		frmt++;
-	}
-	return (len);
+            result = check_format(*(++frmt), ap);
+			if (result < 0)
+				return (-1);
+			len += result;
+        } 
+		else 
+		{
+            result = write(1, frmt, 1);
+            if (result == -1) 
+                return -1;
+            len += result;
+        }
+        frmt++;
+    }
+    va_end(ap);
+    return len;
 }
+
 /*
 while (frmt[i] != '\0') {
         if (frmt[i] == '%') {

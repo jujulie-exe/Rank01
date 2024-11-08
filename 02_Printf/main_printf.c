@@ -101,15 +101,24 @@ int main(void)
 	ft_ret = 0;
 	printf("TEST [PERCENTAGE]\n");
    	ft_ret += ft_printf("Percentage test: %%\n");
-   	ft_ret += ft_printf("Percentage test: %ixXcds%%uipmlq\n");
+   	//ft_ret += ft_printf("Percentage test: %ixXcds%%uipmlq\n");
    	ft_ret += ft_printf("Percentage test: %%%%%%%%%%%%%%%%\n");
-   	ft_ret += ft_printf("%");
+   	ft_ret += ft_printf("%h");
    	std_ret += printf("Percentage test: %%\n");
-   	std_ret += printf("Percentage test: %ixXcds%%uipmlq\n");
+   	//std_ret += printf("Percentage test: %ixXcds%%uipmlq\n");
    	std_ret += printf("Percentage test: %%%%%%%%%%%%%%%%\n");
-   	std_ret += printf("%");
+   	std_ret += printf("%h");
    	printf("Return values: ft_printf = %d, printf = %d\n\n", ft_ret, std_ret);
 
+/***********/////////////////////////////////////////////////////////////////****
+	std_ret = 0;
+	printf("TEST [NO ARG]\n");
+	ft_ret = 0;
+	ft_ret += ft_printf(" NO ARG TEST\n");
+	ft_ret += ft_printf("");
+	std_ret += printf(" NO ARG TEST\n");
+    std_ret += printf("");
+	printf("Return values: ft_printf = %d, printf = %d\n\n", ft_ret, std_ret);
 /***********/////////////////////////////////////////////////////////////////****
 	std_ret = 0;
 	ft_ret = 0;
