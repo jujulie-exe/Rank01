@@ -6,13 +6,13 @@
 /*   By: jfranco <jfranco@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 12:23:05 by jfranco           #+#    #+#             */
-/*   Updated: 2024/11/08 13:57:17 by jfranco          ###   ########.fr       */
+/*   Updated: 2024/11/08 18:09:13 by jfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int out_digit(int n)
+int	out_digit(int n)
 {
 	int		count;
 
@@ -35,14 +35,13 @@ int out_digit(int n)
 		count += out_digit(n / 10);
 		count += out_char(n % 10 + '0');
 	}
-	return(count);
+	return (count);
 }
 
-
-int out_hex(unsigned long long n)
+int	out_hex(unsigned long long n)
 {
-	int		count;
-	char 		*symb;
+	int long	count;
+	char		*symb;
 
 	symb = "0123456789abcdef";
 	count = 0;
@@ -55,17 +54,15 @@ int out_hex(unsigned long long n)
 		count += out_hex(n / 16);
 		count += write(1, &symb[n % 16], 1);
 	}
-	return(count);
+	return (count);
 }
 
-
-int out_hexdigit_upper_case(unsigned int n)
+int	out_hexdigit_upper_case(unsigned int n)
 {
-	int		count;
-	char 		*symb;
+	int long		count;
+	char			*symb;
 
 	symb = "0123456789ABCDEF";
-
 	count = 0;
 	if (n < 16)
 	{
@@ -76,10 +73,10 @@ int out_hexdigit_upper_case(unsigned int n)
 		count += out_hexdigit_upper_case(n / 16);
 		count += write(1, &symb[n % 16], 1);
 	}
-	return(count);
-}	
+	return (count);
+}
 
-int out_digit_unsigned(unsigned int n)
+int	out_digit_unsigned(unsigned int n)
 {
 	int		count;
 
@@ -93,5 +90,5 @@ int out_digit_unsigned(unsigned int n)
 		count += out_digit_unsigned(n / 10);
 		count += out_char(n % 10 + '0');
 	}
-	return(count);
+	return (count);
 }
