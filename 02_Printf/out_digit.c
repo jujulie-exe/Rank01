@@ -45,16 +45,11 @@ int	out_hex(unsigned long long n)
 
 	symb = "0123456789abcdef";
 	count = 0;
-	if (n < 16)
-	{
-		count += write(1, &symb[n], 1);
-	}
-	else
-	{
+	if (n >= 16)
 		count += out_hex(n / 16);
-		count += write(1, &symb[n % 16], 1);
-	}
-	return (count);
+	if (write(1, &symb[n % 16], 1) == -1)
+		return (-1);
+	return (count + 1);
 }
 
 int	out_hexdigit_upper_case(unsigned int n)
@@ -64,31 +59,35 @@ int	out_hexdigit_upper_case(unsigned int n)
 
 	symb = "0123456789ABCDEF";
 	count = 0;
-	if (n < 16)
-	{
-		count += write(1, &symb[n], 1);
-	}
-	else
-	{
+	if (n >= 16)
 		count += out_hexdigit_upper_case(n / 16);
-		count += write(1, &symb[n % 16], 1);
-	}
-	return (count);
+	if (write(1, &symb[n % 16], 1) == -1)
+		return (-1);
+	return (count + 1);
 }
 
 int	out_digit_unsigned(unsigned int n)
 {
 	int		count;
+	int		res;
 
 	count = 0;
+	res = 0;
 	if (n < 10)
 	{
-		count += out_char(n + '0');
+		count = out_char(n + '0');
+		if (count == -1)
+			return (-1);
 	}
 	else
 	{
-		count += out_digit_unsigned(n / 10);
-		count += out_char(n % 10 + '0');
+		count = out_digit_unsigned(n / 10);
+		if (count == -1)
+			return (-1);
+		res = out_char(n % 10 + '0');
+		if (count == -1)
+			return (-1);
+		count += res;
 	}
 	return (count);
 }

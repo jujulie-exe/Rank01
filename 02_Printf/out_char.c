@@ -20,15 +20,26 @@ int	out_char(int c)
 int	print_ad(void *ptr)
 {
 	int long	count;
+	int long	res;
 	uintptr_t	adress;
 
 	count = 0;
+	res = 0;
 	if (ptr == NULL)
 	{
-		return (write(1, "0x0", 3));
+		return (write(1, "(nil)", 5));
 	}
 	adress = (uintptr_t)ptr;
 	count += write(1, "0x", 2);
-	count += out_hex(adress);
+	res += out_hex(adress);
+	if (res == -1)
+		return (-1);
+	count += res;
 	return (count);
+}
+
+int	error_write(va_list *ap)
+{
+	va_end(*ap);
+	return (-1);
 }

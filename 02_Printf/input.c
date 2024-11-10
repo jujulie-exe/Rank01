@@ -26,7 +26,8 @@ int	out_str(char *s)
 	}
 	while (s[len] != '\0')
 	{
-		out_char((int)s[len]);
+		if (out_char((int)s[len]) == -1)
+			return (-1);
 		len++;
 	}
 	return (len);
@@ -37,9 +38,7 @@ int	check_format(char s, va_list ap)
 	int	len;
 
 	len = 0;
-	if (s == '\0')
-		return (-1);
-	else if (s == 'c')
+	if (s == 'c')
 		len += out_char(va_arg(ap, int));
 	else if (s == 's')
 		len += out_str(va_arg(ap, char *));
@@ -73,17 +72,14 @@ int	ft_printf(const char *frmt, ...)
 		if (*frmt == '%')
 		{
 			result = check_format(*(++frmt), ap);
-			if (result < 0)
-				return (-1);
-			len += result;
 		}
 		else
 		{
 			result = write(1, frmt, 1);
-			if (result == -1)
-				return (-1);
-			len += result;
 		}
+		if (result < 0)
+			return (error_write(&ap));
+		len += result;
 		frmt++;
 	}
 	va_end(ap);
