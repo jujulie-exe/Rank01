@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdint.h>
+# include <stdarg.h>
 
 int	ft_printf(const char *frmt, ...);
 int	out_digit(int n);
@@ -25,5 +26,6 @@ int	out_hex(unsigned long long n);
 int	out_digit_unsigned(unsigned int n);
 int	out_hexdigit_upper_case(unsigned int n);
 int	print_ad(void *ptr);
+int	error_write(va_list *ap);
 
 #endif
